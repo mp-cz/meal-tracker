@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Documentation first (MANDATORY)
+
+**Before generating ANY code, ALWAYS read the relevant file(s) in the `/docs` directory first**, and follow the standards they define. This applies to every task, with no exceptions. If a task touches several areas, read every relevant docs file.
+
+- UI work (components, pages, styling) → `docs/ui.md`. Only shadcn/ui components are allowed; never create custom UI components.
+- If no docs file covers the area you're working in, check `/docs` anyway before proceeding.
+
 ## Status
 
 Freshly bootstrapped from Create Next App; no meal-tracking features exist yet. Only the default `src/app/layout.tsx`, `page.tsx` and `globals.css` are present.
