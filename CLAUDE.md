@@ -7,6 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Before generating ANY code, ALWAYS read the relevant file(s) in the `/docs` directory first**, and follow the standards they define. This applies to every task, with no exceptions. If a task touches several areas, read every relevant docs file.
 
 - UI work (components, pages, styling) → `docs/ui.md`. Only shadcn/ui components are allowed; never create custom UI components.
+- Data fetching, database queries, or anything touching user data → `docs/data-fetching.md`. Server Components only (no route handlers for data), queries via helpers in `src/data/` using Drizzle (no raw SQL), and users may only access their own data.
+- Authentication, sessions, route protection, or getting the current user → `docs/auth.md`. Clerk only; use `await auth()` server-side and never accept a user id from the caller.
+- Data mutations (create/update/delete) → `docs/data-mutations.md`. Server Actions in co-located `actions.ts` files only, typed params (no `FormData`), Zod validation, writes via Drizzle helpers in `src/data/`.
 - If no docs file covers the area you're working in, check `/docs` anyway before proceeding.
 
 ## Status
