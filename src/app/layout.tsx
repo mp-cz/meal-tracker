@@ -9,6 +9,7 @@ import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeToggle } from "./theme-toggle";
@@ -45,19 +46,29 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <ClerkProvider appearance={{ theme: shadcn }}>
-            <header className="flex items-center justify-end gap-3 p-4">
-              <ThemeToggle />
-              <Show when="signed-out">
-                <SignInButton mode="modal">
-                  <Button variant="ghost">Sign in</Button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <Button>Sign up</Button>
-                </SignUpButton>
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
+            <header className="flex items-center justify-between gap-3 p-4">
+              <Button
+                variant="ghost"
+                nativeButton={false}
+                render={<Link href="/dashboard" />}
+                className="text-lg font-semibold"
+              >
+                Meal Tracker
+              </Button>
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+                <Show when="signed-out">
+                  <SignInButton mode="modal">
+                    <Button variant="ghost">Sign in</Button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <Button>Sign up</Button>
+                  </SignUpButton>
+                </Show>
+                <Show when="signed-in">
+                  <UserButton />
+                </Show>
+              </div>
             </header>
             {children}
             <Toaster position="bottom-right" />
