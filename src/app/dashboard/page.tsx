@@ -1,8 +1,12 @@
 import { TZDate } from "@date-fns/tz";
 import { addDays, format, isValid, parse, startOfDay } from "date-fns";
 import { cookies } from "next/headers";
+import Link from "next/link";
+
+import { PlusIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -49,9 +53,20 @@ export default async function DashboardPage({
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Meals</CardTitle>
-          <CardDescription>{format(date, "EEEE, MMMM d, yyyy")}</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <CardTitle>Meals</CardTitle>
+            <CardDescription>
+              {format(date, "EEEE, MMMM d, yyyy")}
+            </CardDescription>
+          </div>
+          <Button
+            nativeButton={false}
+            render={<Link href="/dashboard/meal/new" />}
+          >
+            <PlusIcon />
+            Log new meal
+          </Button>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {meals.length === 0 && (
@@ -65,22 +80,28 @@ export default async function DashboardPage({
               0,
             );
             return (
-              <Card key={meal.id} size="sm">
-                <CardContent className="flex items-center justify-between gap-4">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-medium">
-                      {meal.items.map((i) => i.foodItem.name).join(", ") ||
-                        "No items"}
+              <Link
+                key={meal.id}
+                href={`/dashboard/meal/${meal.id}`}
+                className="block"
+              >
+                <Card size="sm" className="transition-colors hover:bg-muted/50">
+                  <CardContent className="flex items-center justify-between gap-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium">
+                        {meal.items.map((i) => i.foodItem.name).join(", ") ||
+                          "No items"}
+                      </span>
+                      <Badge variant="secondary" className="capitalize">
+                        {meal.mealType}
+                      </Badge>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {Math.round(calories)} kcal
                     </span>
-                    <Badge variant="secondary" className="capitalize">
-                      {meal.mealType}
-                    </Badge>
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {Math.round(calories)} kcal
-                  </span>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </CardContent>
