@@ -1,5 +1,8 @@
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,8 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getAvailableFoodItems } from "@/data/food-items";
 import { getMealById } from "@/data/meals";
 import { MealForm } from "./meal-form";
+import { MealItems } from "./meal-items";
 
 export default async function EditMealPage({
   params,
@@ -21,8 +26,23 @@ export default async function EditMealPage({
   const meal = await getMealById(mealId);
   if (!meal) notFound();
 
+  const foods = await getAvailableFoodItems();
+
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 p-6">
+    <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+      <Button
+        variant="ghost"
+        className="self-start"
+        render={
+          <Link
+            href={`/dashboard?date=${meal.eatenAt.toISOString().slice(0, 10)}`}
+          />
+        }
+      >
+        <ArrowLeft />
+        Back to dashboard
+      </Button>
+
       <Card>
         <CardHeader>
           <CardTitle>Edit meal</CardTitle>
@@ -34,6 +54,16 @@ export default async function EditMealPage({
             mealType={meal.mealType}
             eatenAt={meal.eatenAt.toISOString()}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Food items</CardTitle>
+          <CardDescription>Log what you ate in this meal.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <MealItems mealId={meal.id} items={meal.items} foods={foods} />
         </CardContent>
       </Card>
     </main>
