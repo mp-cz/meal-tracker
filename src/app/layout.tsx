@@ -7,6 +7,7 @@ import {
 } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -35,8 +36,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ClerkProvider>
           <header className="flex items-center justify-end gap-3 p-4">
             <Show when="signed-out">
-              <SignInButton mode="modal" />
-              <SignUpButton mode="modal" />
+              <SignInButton mode="modal">
+                <Button variant="ghost">Sign in</Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button>Sign up</Button>
+              </SignUpButton>
             </Show>
             <Show when="signed-in">
               <UserButton />
