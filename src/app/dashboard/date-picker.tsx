@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -19,11 +19,19 @@ export function DatePicker({ dateKey }: { dateKey: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const date = parse(dateKey, "yyyy-MM-dd", new Date());
+  const refreshed = useRef(false);
 
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (!document.cookie.split("; ").includes(`tz=${encodeURIComponent(tz)}`)) {
-      document.cookie = `tz=${encodeURIComponent(tz)}; path=/; max-age=31536000; samesite=lax`;
+    const current = document.cookie
+      .split("; ")
+      .find((c) => c.startsWith("tz="))
+      ?.slice(3);
+    if (current !== undefined && decodeURIComponent(current) === tz) return;
+    document.cookie = `tz=${encodeURIComponent(tz)}; path=/; max-age=31536000; samesite=lax`;
+    // Refresh at most once per mount so a cookie that doesn't stick can't cause a loop.
+    if (!refreshed.current) {
+      refreshed.current = true;
       router.refresh();
     }
   }, [router]);

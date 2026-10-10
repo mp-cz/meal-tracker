@@ -42,25 +42,7 @@ export function MealForm() {
     startTransition(async () => {
       try {
         await createMealAction({ mealType, eatenAt: new Date(eatenAt) });
-        toast.custom(
-          () => (
-            <div className="flex w-56 flex-col items-center gap-1 rounded-t-[3rem] rounded-b-2xl border-2 border-amber-600/60 bg-amber-200 px-6 pt-6 pb-4 text-amber-950 shadow-lg">
-              <div className="flex items-center gap-5">
-                <span className="size-2.5 rounded-full bg-amber-950" />
-                <span className="size-2.5 rounded-full bg-amber-950" />
-              </div>
-              <div className="flex w-full items-center justify-between">
-                <span className="size-3 rounded-full bg-pink-400/70" />
-                <span className="h-3 w-5 rounded-b-full border-b-2 border-amber-950" />
-                <span className="size-3 rounded-full bg-pink-400/70" />
-              </div>
-              <p className="mt-1 text-center text-sm font-semibold">
-                Meal logged! Yum!
-              </p>
-            </div>
-          ),
-          { duration: 4000 },
-        );
+        toast.success("Meal logged! Yum!");
         router.push(`/dashboard?date=${eatenAt.slice(0, 10)}`);
       } catch {
         setError("Could not save the meal. Please try again.");

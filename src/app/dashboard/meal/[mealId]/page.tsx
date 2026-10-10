@@ -1,4 +1,7 @@
+import { TZDate } from "@date-fns/tz";
+import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
@@ -12,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { getAvailableFoodItems } from "@/data/food-items";
 import { getMealById } from "@/data/meals";
+import { resolveTimeZone } from "@/lib/timezone";
 import { MealForm } from "./meal-form";
 import { MealItems } from "./meal-items";
 
@@ -27,17 +31,15 @@ export default async function EditMealPage({
   if (!meal) notFound();
 
   const foods = await getAvailableFoodItems();
+  const timeZone = resolveTimeZone((await cookies()).get("tz")?.value);
+  const mealDay = format(new TZDate(meal.eatenAt, timeZone), "yyyy-MM-dd");
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
       <Button
         variant="ghost"
         className="self-start"
-        render={
-          <Link
-            href={`/dashboard?date=${meal.eatenAt.toISOString().slice(0, 10)}`}
-          />
-        }
+        render={<Link href={`/dashboard?date=${mealDay}`} />}
       >
         <ArrowLeft />
         Back to dashboard

@@ -15,19 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getMealsForDay } from "@/data/meals";
+import { resolveTimeZone } from "@/lib/timezone";
 import { DatePicker } from "./date-picker";
-
-// The browser stores its IANA timezone in the "tz" cookie (see date-picker.tsx)
-// so day boundaries are computed in the user's zone, not the server's.
-function resolveTimeZone(value: string | undefined) {
-  if (!value) return "UTC";
-  try {
-    new Intl.DateTimeFormat(undefined, { timeZone: value });
-    return value;
-  } catch {
-    return "UTC";
-  }
-}
 
 export default async function DashboardPage({
   searchParams,
