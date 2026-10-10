@@ -56,6 +56,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 Meal Tracker
               </Button>
               <div className="flex items-center gap-3">
+                <span className="hidden text-sm text-muted-foreground sm:inline">
+                  Created by Michal Prause
+                </span>
                 <ThemeToggle />
                 <Show when="signed-out">
                   <SignInButton mode="modal">
