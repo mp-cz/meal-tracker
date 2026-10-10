@@ -117,6 +117,40 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.citrus-lime {
+  --background: oklch(0.985 0.025 115);
+  --foreground: oklch(0.25 0.04 130);
+  --card: oklch(0.995 0.015 110);
+  --card-foreground: oklch(0.25 0.04 130);
+  --popover: oklch(0.995 0.015 110);
+  --popover-foreground: oklch(0.25 0.04 130);
+  --primary: oklch(0.72 0.2 128);
+  --primary-foreground: oklch(0.2 0.05 130);
+  --secondary: oklch(0.95 0.07 105);
+  --secondary-foreground: oklch(0.3 0.06 125);
+  --muted: oklch(0.955 0.04 115);
+  --muted-foreground: oklch(0.48 0.06 130);
+  --accent: oklch(0.92 0.12 100);
+  --accent-foreground: oklch(0.28 0.06 125);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0.06 118);
+  --input: oklch(0.88 0.06 118);
+  --ring: oklch(0.68 0.18 128);
+  --chart-1: oklch(0.85 0.2 125);
+  --chart-2: oklch(0.72 0.2 128);
+  --chart-3: oklch(0.6 0.17 135);
+  --chart-4: oklch(0.5 0.13 140);
+  --chart-5: oklch(0.4 0.1 145);
+  --sidebar: oklch(0.97 0.04 115);
+  --sidebar-foreground: oklch(0.25 0.04 130);
+  --sidebar-primary: oklch(0.72 0.2 128);
+  --sidebar-primary-foreground: oklch(0.2 0.05 130);
+  --sidebar-accent: oklch(0.92 0.12 100);
+  --sidebar-accent-foreground: oklch(0.28 0.06 125);
+  --sidebar-border: oklch(0.88 0.06 118);
+  --sidebar-ring: oklch(0.68 0.18 128);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
