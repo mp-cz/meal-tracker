@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,19 @@ import {
 } from "@/components/ui/popover";
 
 // Client-only: picking a date navigates to ?date=yyyy-MM-dd; data is fetched in the page.
-export function DatePicker({ date }: { date: Date }) {
+// Also records the browser timezone in a cookie so the server can compute day ranges.
+export function DatePicker({ dateKey }: { dateKey: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const date = parse(dateKey, "yyyy-MM-dd", new Date());
+
+  useEffect(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (!document.cookie.split("; ").includes(`tz=${encodeURIComponent(tz)}`)) {
+      document.cookie = `tz=${encodeURIComponent(tz)}; path=/; max-age=31536000; samesite=lax`;
+      router.refresh();
+    }
+  }, [router]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

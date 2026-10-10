@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createMeal } from "@/data/meals";
+import { updateMeal } from "@/data/meals";
 
-const createMealSchema = z.object({
+const updateMealSchema = z.object({
+  id: z.uuid(),
   mealType: z.enum(["breakfast", "lunch", "dinner", "snack"]),
   eatenAt: z.coerce
     .date()
@@ -15,11 +16,12 @@ const createMealSchema = z.object({
     ),
 });
 
-type CreateMealInput = z.infer<typeof createMealSchema>;
+type UpdateMealInput = z.infer<typeof updateMealSchema>;
 
-export async function createMealAction(input: CreateMealInput) {
-  const data = createMealSchema.parse(input);
-  const meal = await createMeal(data);
+export async function updateMealAction(input: UpdateMealInput) {
+  const { id, ...data } = updateMealSchema.parse(input);
+  const meal = await updateMeal(id, data);
   revalidatePath("/dashboard");
+  revalidatePath(`/dashboard/meal/${id}`);
   return { id: meal.id };
 }

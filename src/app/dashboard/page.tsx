@@ -1,4 +1,6 @@
+import { TZDate } from "@date-fns/tz";
 import { addDays, format, isValid, parse, startOfDay } from "date-fns";
+import { cookies } from "next/headers";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,17 +13,31 @@ import {
 import { getMealsForDay } from "@/data/meals";
 import { DatePicker } from "./date-picker";
 
+// The browser stores its IANA timezone in the "tz" cookie (see date-picker.tsx)
+// so day boundaries are computed in the user's zone, not the server's.
+function resolveTimeZone(value: string | undefined) {
+  if (!value) return "UTC";
+  try {
+    new Intl.DateTimeFormat(undefined, { timeZone: value });
+    return value;
+  } catch {
+    return "UTC";
+  }
+}
+
 export default async function DashboardPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { date: dateParam } = await searchParams;
+  const timeZone = resolveTimeZone((await cookies()).get("tz")?.value);
+  const now = new TZDate(new Date(), timeZone);
   const parsed =
-    typeof dateParam === "string"
-      ? parse(dateParam, "yyyy-MM-dd", new Date())
+    typeof dateParam === "string" && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)
+      ? parse(dateParam, "yyyy-MM-dd", now)
       : null;
-  const date = parsed && isValid(parsed) ? startOfDay(parsed) : startOfDay(new Date());
+  const date = startOfDay(parsed && isValid(parsed) ? parsed : now);
 
   const meals = await getMealsForDay(date, addDays(date, 1));
 
@@ -29,7 +45,7 @@ export default async function DashboardPage({
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <DatePicker date={date} />
+        <DatePicker dateKey={format(date, "yyyy-MM-dd")} />
       </div>
 
       <Card>
